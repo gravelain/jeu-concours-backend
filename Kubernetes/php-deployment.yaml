@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: php
+  template:
+    metadata:
+      labels:
+        app: php
+    spec:
+      containers:
+      - name: php
+        image: your-php-image:latest
+        env:
+        - name: TIMEZONE
+          value: ${TIMEZONE}
+        volumeMounts:
+        - name: symfony-app
+          mountPath: /var/www/symfony
+        - name: symfony-app-var
+          mountPath: /var/www/symfony/var
+        - name: symfony-app-vendor
+          mountPath: /var/www/symfony/vendor
+      volumes:
+      - name: symfony-app
+        emptyDir: {}
+      - name: symfony-app-var
+        emptyDir: {}
+      - name: symfony-app-vendor
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-service
+spec:
+  selector:
+    app: php
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP

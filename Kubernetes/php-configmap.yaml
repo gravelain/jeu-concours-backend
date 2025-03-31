@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: php-config
+data:
+  TIMEZONE: "Europe/Paris"  # Remplacez par le fuseau horaire de votre choix
+

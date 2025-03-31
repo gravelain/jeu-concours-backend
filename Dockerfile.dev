@@ -1,0 +1,27 @@
+# Utiliser une image PHP avec FPM comme base
+FROM php:8.2-fpm
+
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Installer les dépendances système nécessaires
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libpq-dev \
+    && docker-php-ext-install pdo_mysql
+
+# Installer Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+# Copier le code source dans le conteneur
+COPY . .
+
+# Installer les dépendances de développement
+RUN composer install --prefer-dist --no-progress --no-interaction
+
+# Exposer le port 9000 pour PHP-FPM
+EXPOSE 9000
+
+# Commande pour démarrer PHP-FPM
+CMD ["php-fpm"]

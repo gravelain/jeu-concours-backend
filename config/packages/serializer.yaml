@@ -1,0 +1,11 @@
+# config/packages/serializer.yaml
+framework:
+    serializer:
+        # Enable or disable the serializer
+        enabled: true
+        # Enable or disable attribute support
+        enable_attributes: true
+        # Default context for serialization
+        default_context:
+            groups: ['default']
+            enable_max_depth: true

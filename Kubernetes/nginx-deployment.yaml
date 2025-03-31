@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: symfony-app
+          mountPath: /var/www/symfony
+        - name: symfony-app-var
+          mountPath: /var/www/symfony/var
+        - name: symfony-app-vendor
+          mountPath: /var/www/symfony/vendor
+        resources: # Ajout des limites de ressources
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: symfony-app
+        emptyDir: {}
+      - name: symfony-app-var
+        emptyDir: {}
+      - name: symfony-app-vendor
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30080  # Port spécifique entre 30000 et 32767
+  type: NodePort

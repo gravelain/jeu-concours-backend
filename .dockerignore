@@ -1,0 +1,5 @@
+vendor
+node_modules
+.git
+var/log
+var/cache
