@@ -31,8 +31,8 @@ USER symfony
 ARG APP_ENV=prod
 RUN if [ "$APP_ENV" != "prod" ]; then composer install --prefer-dist --no-progress --no-interaction --no-scripts; else composer install --no-dev --optimize-autoloader --no-progress --no-interaction --no-scripts; fi
 
-# Exposer le port 9000 pour PHP-FPM
-EXPOSE 9000
+# Exposer le port pour PHP-FPM
+EXPOSE 5000
 
 # Commande pour démarrer PHP-FPM
 CMD ["php-fpm"]
